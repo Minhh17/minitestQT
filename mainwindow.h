@@ -1,0 +1,55 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QSerialPortInfo>
+#include <QString>
+#include "serialport.h"
+#include "fpgacontroldialog.h"
+#include <DecevieDialog.h>
+#include <DeceviesControl.h>
+#include "socketcontrol.h"
+#include <QMetaEnum>
+
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+    void LoadPort();
+    void setDeviceContoller();
+
+private slots:
+    void on_btn_Open_clicked();
+
+    void on_btn_connect_clicked();
+
+    // slots of socket
+    void device_connected();
+    void device_disconnected();
+    void device_stateChanged(QAbstractSocket::SocketState);
+    void device_errorOccurred(QAbstractSocket::SocketError);
+    void device_dataReady(QByteArray data);
+
+signals:
+    void connected(DeceviesControl*);
+    void socketconnected(SocketControl*);
+
+private:
+    Ui::MainWindow *ui;
+    DeceviesControl *_decevie;
+    SerialPort *_port;
+    FpgaControlDialog fpga_dlg;
+    DecevieDialog test_dlg;
+    SocketControl *_socketcontroller;
+
+};
+#endif // MAINWINDOW_H

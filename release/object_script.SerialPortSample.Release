@@ -1,0 +1,14 @@
+release/DecevieDialog.o
+release/DeceviesControl.o
+release/commandstruct.o
+release/fpgacontroldialog.o
+release/main.o
+release/mainwindow.o
+release/serialport.o
+release/socketcontrol.o
+release/moc_DecevieDialog.o
+release/moc_DeceviesControl.o
+release/moc_fpgacontroldialog.o
+release/moc_mainwindow.o
+release/moc_serialport.o
+release/moc_socketcontrol.o

@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FpgaControlDialog</class>
+ <widget class="QDialog" name="FpgaControlDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>489</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>31</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PRI_Mode</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_priMode">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>30</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_pri_mode">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>31</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>10</y>
+     <width>371</width>
+     <height>321</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>TL</string>
+   </property>
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>71</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RF_TL</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_rf_tl">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>71</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_rf_tl">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>71</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_20">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>101</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Modulation TL</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_mod_tl">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>101</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_mod_tl">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>101</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_wf_ctrl_tl">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>41</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_18">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>41</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>WF_Ctrl</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_wf_ctrl_tl">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>41</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_tl_range">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>131</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_19">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>131</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TL Range</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_tl_range">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>131</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>191</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ratio TL</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_ratio_tl">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>191</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_ratio_tl">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>191</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_att_tl">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>161</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>161</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Att TL</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_att_tl">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>161</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_22">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>220</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Offset Att</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_offset_att">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>220</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_ratio_tl_2">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>220</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_noise_width">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>250</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_noise_width">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>250</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_23">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>250</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Noise Width</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_ratio_noise">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>280</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ln_ratio_noise">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>280</y>
+      <width>108</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_24">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>280</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ratio Noise</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="lbl_serial_state">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>320</y>
+     <width>251</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>61</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>WF_Ctrl</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_wf_ctrl_mt">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>61</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_wf_ctrl">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>61</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_rf_tx">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>91</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_rf_tx">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>91</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>91</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>RF_TX</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_att_tx">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>361</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_att_tx">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>361</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_15">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>361</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Att TX</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_14">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>271</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pulse 2 Delay</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_pulse2_delay">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>271</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_pulse2">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>271</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>181</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Loop Back</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_loopback">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>181</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_loopback">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>181</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>421</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ratio MT</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_ratio_mt">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>421</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_ratio_mt">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>421</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_target_range">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>211</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>211</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Target Range</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_target_range">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>211</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_12">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>331</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Modulation KD</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_mod_kd_onOff">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>331</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_mod_kd">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>331</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_16">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>301</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Mod KD Range</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_mod_kd_range">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>301</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_mod_kd_range">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>301</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_pulse1">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>241</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>241</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pulse 1 Delay</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_pulse1_delay">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>241</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_13">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>391</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Modulation MT</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_mod_mt">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>391</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_mod_mt">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>391</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>151</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Threshold_PC</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_Thres_pc">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>151</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_thres_pc">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>151</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>121</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Threshold_LFM</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_Thres_lfm">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>121</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_thres_lfm">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>121</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_offset_range">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>450</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_21">
+   <property name="geometry">
+    <rect>
+     <x>41</x>
+     <y>450</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Offset Range</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ln_offset_range">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>450</y>
+     <width>108</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
