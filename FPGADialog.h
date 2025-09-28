@@ -1,5 +1,5 @@
-#ifndef DECEVIEDIALOG_H
-#define DECEVIEDIALOG_H
+#ifndef FPGADIALOG_H
+#define FPGADIALOG_H
 
 #include <QDialog>
 #include "serialport.h"
@@ -7,16 +7,16 @@
 #include "commandstruct.h"
 
 namespace Ui {
-class DecevieDialog;
+class FPGADialog;
 }
 
-class DecevieDialog : public QDialog
+class FPGADialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DecevieDialog(QWidget *parent = nullptr);
-    ~DecevieDialog();
+    explicit FPGADialog(QWidget *parent = nullptr);
+    ~FPGADialog();
 
 private slots:
     void on_btn_connect_clicked();
@@ -26,8 +26,8 @@ private slots:
     void readyRead(QByteArray);
 
 private:
-    Ui::DecevieDialog *ui;
+    Ui::FPGADialog *ui;
     SerialPort _port;
 };
 
-#endif // DECEVIEDIALOG_H
+#endif // FPGADIALOG_H

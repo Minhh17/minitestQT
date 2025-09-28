@@ -1,4 +1,4 @@
-QT       += core gui serialport network
+QT += core gui serialport network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,9 +9,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    DecevieDialog.cpp \
-    DeceviesControl.cpp \
-    commandstruct.cpp \
+    DeviceControl.cpp \
+    FPGADialog.cpp \
     fpgacontroldialog.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -19,8 +18,8 @@ SOURCES += \
     socketcontrol.cpp
 
 HEADERS += \
-    DecevieDialog.h \
-    DeceviesControl.h \
+    DeviceControl.h \
+    FPGADialog.h \
     commandstruct.h \
     fpgacontroldialog.h \
     mainwindow.h \
@@ -28,7 +27,7 @@ HEADERS += \
     socketcontrol.h
 
 FORMS += \
-    DecevieDialog.ui \
+    FPGADialog.ui \
     fpgacontroldialog.ui \
     mainwindow.ui
 

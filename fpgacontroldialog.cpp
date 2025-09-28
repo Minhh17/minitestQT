@@ -12,6 +12,7 @@ FpgaControlDialog::FpgaControlDialog(QWidget *parent) :
 
 FpgaControlDialog::~FpgaControlDialog()
 {
+    qDebug()<< "~FpgaControlDialog()";
     delete ui;
 }
 
@@ -38,14 +39,14 @@ void FpgaControlDialog::ConvertLO(int f0, int &LO_R3, int &LO_R4)
     LO_R4 = (quint32)R4dec;
 }
 
-void FpgaControlDialog::SerialPortConnected(DeceviesControl *_decevie)
+void FpgaControlDialog::SerialPortConnected(DeviceControl *_decevie)
 {
     if(fpga_decevie != nullptr) {
         delete fpga_decevie;
     }
     fpga_decevie = _decevie;
-    connect(fpga_decevie, &DeceviesControl::dataReady, this, &FpgaControlDialog::ReadData);
-    auto isConnected = fpga_decevie->IsOpen();
+    connect(fpga_decevie, &DeviceControl::dataReady, this, &FpgaControlDialog::ReadData);
+    auto isConnected = fpga_decevie->isOpen();
     if(isConnected) {
         ui->lbl_serial_state->setText("Connected");
     } else {
@@ -266,7 +267,6 @@ void FpgaControlDialog::Disconnect()
 {
 
 }
-
 
 void FpgaControlDialog::on_btn_noise_width_clicked()
 {

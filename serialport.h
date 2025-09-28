@@ -14,10 +14,11 @@ public:
     explicit SerialPort(QObject *parent = nullptr);
 
     bool Connect(QString portname);
+    bool Close();
 
     qint64 Write(QByteArray data);
 
-    bool IsOpend();
+    bool isOpen();
 
     ~SerialPort();
 private:
@@ -25,12 +26,10 @@ private:
 
 private slots:
     void dataReady();
-
     void Disconnect();
 
 signals:
     void dataRecevie(QByteArray data);
-
     void disconnected();
 };
 

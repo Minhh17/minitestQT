@@ -1,17 +1,19 @@
-#ifndef DECEVIESCONTROL_H
-#define DECEVIESCONTROL_H
+#ifndef DEVICECONTROL_H
+#define DEVICECONTROL_H
 
 #include <QObject>
 #include <serialport.h>
 #include <commandstruct.h>
 
-class DeceviesControl : public QObject
+// PC Obj
+
+class DeviceControl : public QObject
 {
     Q_OBJECT
 public:
-    explicit DeceviesControl(QObject *parent = nullptr);
+    explicit DeviceControl(QObject *parent = nullptr);
 
-    DeceviesControl(QString);
+    DeviceControl(QString);
 
     bool Connect();
 
@@ -21,21 +23,22 @@ public:
 
     void SetPortName(QString);
 
-    bool IsOpen();
+    bool isOpen();
 
     quint8 Crc_Calulater(quint8 *data, int len);
 
-    ~DeceviesControl();
+    ~DeviceControl();
 
 signals:
 
     void dataReady(QByteArray);
 
-    void disconnected();
+    // void disconnected();
 
 private slots:
 
     void readData(QByteArray);
+    void disconnected();
 
 private:
     SerialPort *_port;
@@ -44,4 +47,4 @@ private:
 
 };
 
-#endif // DECEVIESCONTROL_H
+#endif // DEVICECONTROL_H

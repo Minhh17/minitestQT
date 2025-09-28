@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DecevieDialog</class>
- <widget class="QDialog" name="DecevieDialog">
+ <class>FPGADialog</class>
+ <widget class="QDialog" name="FPGADialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,8 +29,8 @@
   <widget class="QListWidget" name="lst_Message">
    <property name="geometry">
     <rect>
-     <x>21</x>
-     <y>11</y>
+     <x>10</x>
+     <y>30</y>
      <width>256</width>
      <height>271</height>
     </rect>
@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Decevie State:</string>
+    <string>Device State:</string>
    </property>
   </widget>
   <widget class="QLabel" name="lbl_decevie_state">
@@ -103,12 +103,31 @@
     <rect>
      <x>284</x>
      <y>146</y>
-     <width>81</width>
+     <width>101</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Decevie Speed:</string>
+    <string>Device Speed:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>10</y>
+     <width>41</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>41</width>
+     <height>17</height>
+    </size>
+   </property>
+   <property name="text">
+    <string>FPGA</string>
    </property>
   </widget>
  </widget>

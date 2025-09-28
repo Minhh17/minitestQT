@@ -5,7 +5,7 @@
 #include <serialport.h>
 #include <commandstruct.h>
 #include <QString>
-#include <DeceviesControl.h>
+#include <DeviceControl.h>
 #include <socketcontrol.h>
 
 namespace Ui {
@@ -53,7 +53,7 @@ public:
     void ConvertLO(int, int&, int&);
 
 public slots:
-    void SerialPortConnected(DeceviesControl*);
+    void SerialPortConnected(DeviceControl*);
 
     void SocketConneced(SocketControl*);
 
@@ -112,7 +112,7 @@ private slots:
 
 private:
     Ui::FpgaControlDialog *ui;
-    DeceviesControl *fpga_decevie;
+    DeviceControl *fpga_decevie;
     CommandStruct _struct;
     SocketControl *socket_decevie;
 };

@@ -1,38 +1,50 @@
-#include "DeceviesControl.h"
+#include "DeviceControl.h"
 
-DeceviesControl::DeceviesControl(QObject *parent)
+DeviceControl::DeviceControl(QObject *parent)
     : QObject{parent}
 {
 
 }
 
-DeceviesControl::DeceviesControl(QString portname)
+DeviceControl::DeviceControl(QString portname)
 {
     _port = new SerialPort();
     _portName = portname;
     _struct.header = 'A';
     _struct.footer = 'B';
-    connect(_port, &SerialPort::dataRecevie, this, &DeceviesControl::readData);
-    connect(_port, &SerialPort::disconnected, this, &DeceviesControl::disconnected);
+    connect(_port, &SerialPort::dataRecevie, this, &DeviceControl::readData);
+    connect(_port, &SerialPort::disconnected, this, &DeviceControl::disconnected);
 }
 
-DeceviesControl::~DeceviesControl()
+DeviceControl::~DeviceControl()
 {
+    if (_port != nullptr && _port->isOpen()) {
+        qDebug()<< "~DeviceControl() close";
+        _port->disconnect();
+        _port->Close();
+    }
     delete _port;
 }
 
-void DeceviesControl::readData(QByteArray data)
+void DeviceControl::readData(QByteArray data)
 {
     emit dataReady(data);
 }
 
-bool DeceviesControl::Connect()
+void DeviceControl::disconnected()
 {
+    qDebug()<< "DeviceControl::disconnected()";
+    if (_port != nullptr && _port->isOpen()) {
+        _port->disconnect();
+    }
+}
 
+bool DeviceControl::Connect()
+{
     return _port->Connect(_portName);
 }
 
-qint64 DeceviesControl::SendCommand(quint8 cmd, quint32 data)
+qint64 DeviceControl::SendCommand(quint8 cmd, quint32 data)
 {
     QByteArray ba;
     quint8* buff;
@@ -42,29 +54,29 @@ qint64 DeceviesControl::SendCommand(quint8 cmd, quint32 data)
     ba.append(reinterpret_cast<const char*>(&_struct.command), sizeof(char));
     ba.append(reinterpret_cast<const char*>(&_struct.data), sizeof(int));
     buff = reinterpret_cast<quint8*>(ba.data());
-    _struct.crc = Crc_Calulater(buff, sizeof(buff) - 2);
+    _struct.crc = Crc_Calulater(buff, ba.size() - 2);
     ba.append(reinterpret_cast<const char*>(&_struct.crc), sizeof(char));
     ba.append(reinterpret_cast<const char*>(&_struct.footer), sizeof(char));
-//    QByteArray ba(reinterpret_cast<char*>(&_struct), sizeof(CommandStruct));
+    //    QByteArray ba(reinterpret_cast<char*>(&_struct), sizeof(CommandStruct));
     return _port->Write(ba);
 }
 
-QString DeceviesControl::GetPortName()
+QString DeviceControl::GetPortName()
 {
     return _portName;
 }
 
-void DeceviesControl::SetPortName(QString portname)
+void DeviceControl::SetPortName(QString portname)
 {
     _portName = portname;
 }
 
-bool DeceviesControl::IsOpen()
+bool DeviceControl::isOpen()
 {
-    return _port->IsOpend();
+    return _port->isOpen();
 }
 
-quint8 DeceviesControl::Crc_Calulater(quint8 *data, int len)
+quint8 DeviceControl::Crc_Calulater(quint8 *data, int len)
 {
     quint8 crc = 0;
     quint8 extract, sum;

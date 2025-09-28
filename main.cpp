@@ -1,14 +1,14 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include "DecevieDialog.h"
+#include "FPGADialog.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-//    DecevieDialog dlg;
-//    dlg.show();
+    FPGADialog dlg;
+    dlg.show();
     return a.exec();
 }

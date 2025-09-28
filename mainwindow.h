@@ -7,8 +7,8 @@
 #include <QString>
 #include "serialport.h"
 #include "fpgacontroldialog.h"
-#include <DecevieDialog.h>
-#include <DeceviesControl.h>
+#include <FPGADialog.h>
+#include <DeviceControl.h>
 #include "socketcontrol.h"
 #include <QMetaEnum>
 
@@ -40,15 +40,15 @@ private slots:
     void device_dataReady(QByteArray data);
 
 signals:
-    void connected(DeceviesControl*);
+    void connected(DeviceControl*);
     void socketconnected(SocketControl*);
 
 private:
     Ui::MainWindow *ui;
-    DeceviesControl *_decevie;
+    DeviceControl *_decevie;
     SerialPort *_port;
     FpgaControlDialog fpga_dlg;
-    DecevieDialog test_dlg;
+    FPGADialog test_dlg;
     SocketControl *_socketcontroller;
 
 };
