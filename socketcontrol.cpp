@@ -60,25 +60,9 @@ quint64 SocketControl::send(QByteArray data)
     return _socket->write(data);
 }
 
-// quint64 SocketControl::SendCommand(quint8 cmd, quint32 data)
-// {
-//     QByteArray ba;
-//     quint8* buff;
-//     _struct.command = cmd;
-//     _struct.data = data;
-//     ba.append(reinterpret_cast<const char*>(&_struct.header), sizeof(char));
-//     ba.append(reinterpret_cast<const char*>(&_struct.command), sizeof(char));
-//     ba.append(reinterpret_cast<const char*>(&_struct.data), sizeof(int));
-//     buff = reinterpret_cast<quint8*>(ba.data());
-//     _struct.crc = Crc_Calulater(buff, sizeof(buff) - 2);
-//     ba.append(reinterpret_cast<const char*>(&_struct.crc), sizeof(char));
-//     ba.append(reinterpret_cast<const char*>(&_struct.footer), sizeof(char));
-//     //    QByteArray ba(reinterpret_cast<char*>(&_struct), sizeof(CommandStruct));
-//     return _socket->write(ba);
-// }
-
 quint64 SocketControl::SendCommand(quint8 cmd, quint32 data)
 {
+    qDebug()<< "SocketControl::SendCommand with " << data;
     _struct.header = 'A';
     _struct.footer = 'B';
     _struct.command = cmd;

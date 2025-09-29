@@ -48,7 +48,7 @@ private:
     DeviceControl *_device;
     SerialPort *_port;
     FpgaControlDialog fpga_dlg;
-    FPGADialog test_dlg;
+    // FPGADialog test_dlg;
     SocketControl *_socketcontroller;
 
 };

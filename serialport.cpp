@@ -28,10 +28,10 @@ bool SerialPort::Connect(QString portname)
 
 bool SerialPort::Close()
 {
-    if(_serialport != nullptr) {
-        _serialport->close();
-        delete _serialport;
-    }
+    // if(_serialport != nullptr) {
+    //     _serialport->close();
+    //     delete _serialport;
+    // }
 }
 
 qint64 SerialPort::Write(QByteArray data)
@@ -49,11 +49,11 @@ bool SerialPort::isOpen()
 
 SerialPort::~SerialPort()
 {
-    if(_serialport != nullptr) {
-        qDebug()<< "~SerialPort()";
-        _serialport->close();
-        delete _serialport;
-    }
+    // if(_serialport != nullptr) {
+    //     qDebug()<< "~SerialPort()";
+    //     _serialport->close();
+    //     delete _serialport;
+    // }
 }
 
 void SerialPort::dataReady()

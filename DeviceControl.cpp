@@ -18,12 +18,12 @@ DeviceControl::DeviceControl(QString portname)
 
 DeviceControl::~DeviceControl()
 {
-    if (_port != nullptr && _port->isOpen()) {
-        qDebug()<< "~DeviceControl() close";
-        _port->disconnect();
-        _port->Close();
-    }
-    delete _port;
+    // if (_port != nullptr && _port->isOpen()) {
+    //     qDebug()<< "~DeviceControl() close";
+    //     _port->disconnect();
+    //     _port->Close();
+    // }
+    // delete _port;
 }
 
 void DeviceControl::readData(QByteArray data)

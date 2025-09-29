@@ -5,6 +5,9 @@
 #include <QMessageBox>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QHostAddress>
+#include <QHash>
+#include <QList>
 #include <QRandomGenerator>
 
 #include "serialport.h"
@@ -22,6 +25,9 @@ public:
     explicit FPGADialog(QWidget *parent = nullptr);
     ~FPGADialog();
 
+signals:
+    void onSocketReceive(QByteArray);
+
 private slots:
     void on_btn_connect_clicked();
 
@@ -29,11 +35,20 @@ private slots:
 
     void readyRead(QByteArray);
 
+    void onNewTcpConnection();
+    void onSocketReadyRead();
+
+    void onSocketDisconnected();
+
 private:
     Ui::FPGADialog *ui;
     SerialPort *_port;
     // QString _portName;
     CommandStruct _struct;
+    QTcpServer m_server;
+    QList<QTcpSocket*> m_clients;
+    QHash<QTcpSocket*, QByteArray> m_socketBuffers;
+
 };
 
 #endif // FPGADIALOG_H
