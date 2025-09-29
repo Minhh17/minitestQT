@@ -13,16 +13,16 @@ class SerialPort : public QObject
 public:
     explicit SerialPort(QObject *parent = nullptr);
 
-    bool Connect(QString portname);
+    bool Connect(const QString &portname);
     bool Close();
 
-    qint64 Write(QByteArray data);
+    qint64 Write(const QByteArray &data);
 
-    bool isOpen();
+    bool isOpen() const;
 
-    ~SerialPort();
+    ~SerialPort() override;
 private:
-    QSerialPort *_serialport;
+    QSerialPort m_serialport;
 
 private slots:
     void dataReady();

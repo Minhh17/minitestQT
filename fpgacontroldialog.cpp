@@ -1,49 +1,7 @@
 #include "fpgacontroldialog.h"
 #include "ui_fpgacontroldialog.h"
-
-// ==== Protocol: [ 'A' ][ cmd ][ data(4 bytes) ][ crc ][ 'B' ] ====
-// data là 4 byte native-endian, CRC-8 poly 0x8C (LSB-first) tính trên [cmd + 4 byte data]
-static constexpr quint8 H = 'A';
-static constexpr quint8 F = 'B';
-static constexpr int  PKT_SZ = 8;
-
-static quint8 crc8_8C(const quint8* data, int len) {
-    quint8 crc = 0;
-    quint8 extract, sum;
-    quint8 polynomial = 0x8C;
-    qDebug() << "len in = crc8_8C" << len << Qt::endl;
-    for(int i = 0; i < len; i++) {
-        extract = *data;
-        for(int j = 8; j > 0; j--) {
-            sum = (quint8)((crc ^ extract) & 0x01);
-            crc >>= 1;
-            if(sum != 0)
-                crc ^= polynomial;
-            extract >>= 1;
-        }
-        data++;
-    }
-    return crc;
-}
-
-// Tách 1 gói hợp lệ từ đầu buffer (không đổi endian)
-static bool tryExtract(QByteArray &buf, quint8 &cmd, quint32 &data) {
-    int pos = buf.indexOf(char(H));
-    if (pos < 0) { buf.clear(); return false; }
-    if (pos > 0)  buf.remove(0, pos);
-    if (buf.size() < PKT_SZ) return false;
-    if (quint8(buf[7]) != F) { buf.remove(0,1); return false; }
-
-    cmd = quint8(buf[1]);
-    memcpy(&data, buf.constData()+2, 4);      // native-endian đúng với phía gửi
-
-    quint8 tmp[5]; tmp[0] = cmd; memcpy(tmp+1, &data, 4);
-    quint8 crcCalc = crc8_8C(tmp, 5);
-    if (quint8(buf[6]) != crcCalc) { buf.remove(0, PKT_SZ); return false; }
-
-    buf.remove(0, PKT_SZ);
-    return true;
-}
+#include <QDebug>
+#include "protocolutils.h"
 
 FpgaControlDialog::FpgaControlDialog(QWidget *parent) :
     QDialog(parent),
@@ -106,35 +64,41 @@ void FpgaControlDialog::ConvertLO(int f0, int &LO_R3, int &LO_R4)
 
 void FpgaControlDialog::SerialPortConnected(DeviceControl *_decevie)
 {
-    if(fpga_device != nullptr) {
-        delete fpga_device;
+    if (fpga_device == _decevie) {
+        return;
     }
+
+    if (fpga_device != nullptr) {
+        disconnect(fpga_device, nullptr, this, nullptr);
+    }
+
     fpga_device = _decevie;
-    connect(fpga_device, &DeviceControl::dataReady, this, &FpgaControlDialog::ReadData);
-    auto isConnected = fpga_device->isOpen();
-    if(isConnected) {
-        ui->lbl_serial_state->setText("Connected");
+
+    if (fpga_device != nullptr) {
+        connect(fpga_device, &DeviceControl::dataReady, this, &FpgaControlDialog::ReadData);
+        ui->lbl_serial_state->setText(fpga_device->isOpen() ? tr("Connected") : tr("Disconnected"));
     } else {
-        ui->lbl_serial_state->setText("Disconnection !!");
+        ui->lbl_serial_state->setText("Disconnected !!");
     }
 }
 
 void FpgaControlDialog::SocketConnected(SocketControl *_decevie)
 {
-    qDebug() << "new socket";
-    if(socket_device != nullptr) {
-        delete socket_device;
+    if (socket_device == _decevie) {
+        return;
     }
+
+    if (socket_device != nullptr) {
+        disconnect(socket_device, nullptr, this, nullptr);
+    }
+
     socket_device = _decevie;
 
-    connect(socket_device, &SocketControl::dataReady, this, &FpgaControlDialog::ReadData);
-
-    auto isConnected = socket_device->isConnected();
-    if(isConnected) {
-        ui->lbl_serial_state->setText("Connected");
-    }
-    else {
-        ui->lbl_serial_state->setText("Disconnection !!");
+    if (socket_device != nullptr) {
+        connect(socket_device, &SocketControl::dataReady, this, &FpgaControlDialog::ReadData);
+        ui->lbl_serial_state->setText(socket_device->isConnected() ? tr("Connected") : tr("Disconnected"));
+    } else {
+        ui->lbl_serial_state->setText(tr("Disconnected"));
     }
 }
 
@@ -307,23 +271,16 @@ void FpgaControlDialog::on_btn_ratio_tl_2_clicked()
 
 void FpgaControlDialog::ReadData(QByteArray chunk)
 {
-//    ui->lst_Message->addItem(QString(data));
+    //    ui->lst_Message->addItem(QString(data));
     m_rx += chunk;
-    qDebug()<<"ReadData(QByteArray chunk)" << chunk;
 
-    quint8 cmd; quint32 data;
-    qDebug()<<"in here 0" << m_rx.size();
-    while (m_rx.size() >= PKT_SZ) {
-        qDebug()<<"in here 1";
-        if (!tryExtract(m_rx, cmd, data)) {
-            if (m_rx.size() < PKT_SZ) break;
-            continue;
-        }
+    CommandStruct frame {};
+    while (protocol::tryExtractFrame(m_rx, frame)) {
         // Tách 2 tham số 16-bit: x = high16, y = low16
-        quint16 x = quint16((data >> 16) & 0xFFFF);
-        quint16 y = quint16(data & 0xFFFF);
+        const quint16 x = quint16((frame.data >> 16) & 0xFFFF);
+        const quint16 y = quint16(frame.data & 0xFFFF);
         plotPoint(x, y);
-        qInfo() << "RX cmd " << int(cmd) << "x=" << x << "y=" << y;
+        qInfo() << "RX cmd " << int(frame.command) << "x=" << x << "y=" << y;
     }
 }
 
@@ -352,14 +309,10 @@ void FpgaControlDialog::onSocketReadyRead() {
     m_rx += sock->readAll();
 
     quint8 cmd; quint32 data;
-    while (m_rx.size() >= PKT_SZ) {
-        if (!tryExtract(m_rx, cmd, data)) {
-            if (m_rx.size() < PKT_SZ) break;
-            continue;
-        }
-        // Tách 2 param 16-bit (big-endian: x là high-16, y là low-16)
-        quint16 x = quint16((data >> 16) & 0xFFFF);
-        quint16 y = quint16(data & 0xFFFF);
+    CommandStruct frame {};
+    while (protocol::tryExtractFrame(m_rx, frame)) {
+        const quint16 x = quint16((frame.data >> 16) & 0xFFFF);
+        const quint16 y = quint16(frame.data & 0xFFFF);
         plotPoint(x, y);
     }
 }

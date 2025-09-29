@@ -3,22 +3,24 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QString>
 #include <commandstruct.h>
 
 class SocketControl : public QObject
 {
     Q_OBJECT
+
 public:
     explicit SocketControl(QObject *parent = nullptr);
-    SocketControl(QString ip, int port);
-    ~SocketControl();
-    void connectToDevice(QString ip, int port);
-    void disconnect();
-    QAbstractSocket::SocketState state();
-    bool isConnected();
-    quint64 send(QByteArray);
+    SocketControl(const QString &ip, int port, QObject *parent = nullptr);
+    ~SocketControl() override;
+    void connectToDevice(const QString &ip, int port);
+    void disconnectFromDevice();
+    QAbstractSocket::SocketState state() const;
+    bool isConnected() const;
+    quint64 send(const QByteArray &);
     quint64 SendCommand(quint8 cmd, quint32 data);
-    quint8 Crc_Calulater(quint8 *data, int len);
+
 signals:
     void connected();
     void disconnected();
@@ -31,10 +33,9 @@ private slots:
     void socket_readyRead();
 
 private:
-    QTcpSocket *_socket;
+    QTcpSocket m_socket;
     QString _ip;
     int _port;
-    CommandStruct _struct;
 };
 
 #endif // SOCKETCONTROL_H

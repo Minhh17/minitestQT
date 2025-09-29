@@ -12,15 +12,15 @@ class DeviceControl : public QObject
     Q_OBJECT
 public:
     explicit DeviceControl(QObject *parent = nullptr);
+    explicit DeviceControl(const QString &portName, QObject *parent = nullptr);
 
-    DeviceControl(QString);
     bool Connect();
     qint64 SendCommand(quint8, quint32);
-    QString GetPortName();
-    void SetPortName(QString);
-    bool isOpen();
-    quint8 Crc_Calulater(quint8 *data, int len);
-    ~DeviceControl();
+
+    QString GetPortName() const;
+    void SetPortName(const QString &);
+    bool isOpen() const;
+    ~DeviceControl() override;
 
 signals:
     void dataReady(QByteArray);
@@ -31,9 +31,8 @@ private slots:
     void disconnected();
 
 private:
-    SerialPort *_port;
+    SerialPort _port;
     QString _portName;
-    CommandStruct _struct;
 
 };
 

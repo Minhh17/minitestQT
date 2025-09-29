@@ -14,6 +14,7 @@ SOURCES += \
     fpgacontroldialog.cpp \
     main.cpp \
     mainwindow.cpp \
+    protocolutils.cpp \
     serialport.cpp \
     socketcontrol.cpp
 
@@ -23,6 +24,7 @@ HEADERS += \
     commandstruct.h \
     fpgacontroldialog.h \
     mainwindow.h \
+    protocolutils.h \
     serialport.h \
     socketcontrol.h
 

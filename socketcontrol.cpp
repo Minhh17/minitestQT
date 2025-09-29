@@ -1,119 +1,90 @@
 #include "socketcontrol.h"
+#include <QDebug>
+#include "protocolutils.h"
 
 SocketControl::SocketControl(QObject *parent)
     : QObject{parent}
+    , m_socket(this)
 {
-
+    connect(&m_socket, &QTcpSocket::connected, this, &SocketControl::connected);
+    connect(&m_socket, &QTcpSocket::disconnected, this, &SocketControl::disconnected);
+    connect(&m_socket, &QTcpSocket::errorOccurred, this, &SocketControl::errorOccurred);
+    connect(&m_socket, &QTcpSocket::stateChanged, this, &SocketControl::socket_stateChanged);
+    connect(&m_socket, &QTcpSocket::readyRead, this, &SocketControl::socket_readyRead);
 }
 
-SocketControl::SocketControl(QString ip, int port)
+SocketControl::SocketControl(const QString &ip, int port, QObject *parent)
+    : SocketControl(parent)
 {
-    _socket = new QTcpSocket();
-    _ip = ip;
-    _port = port;
-    connect(_socket, &QTcpSocket::connected, this, &SocketControl::connected);
-    connect(_socket, &QTcpSocket::disconnected, this, &SocketControl::disconnected);
-    connect(_socket, &QTcpSocket::errorOccurred, this, &SocketControl::errorOccurred);
-    connect(_socket, &QTcpSocket::stateChanged, this, &SocketControl::socket_stateChanged);
-    connect(_socket, &QTcpSocket::readyRead, this, &SocketControl::socket_readyRead);
     connectToDevice(_ip, _port);
 }
 
 SocketControl::~SocketControl()
 {
-    delete _socket;
+    disconnectFromDevice();
 }
 
-void SocketControl::connectToDevice(QString ip, int port)
+void SocketControl::connectToDevice(const QString &ip, int port)
 {
-    if (_socket->isOpen()) {
+    if (m_socket.isOpen()) {
         if (ip == _ip && port == _port) {
             return;
         }
-        _socket->close();
+        m_socket.close();
     }
+
     _ip = ip;
     _port = port;
-    _socket->connectToHost(_ip, _port);
+    m_socket.connectToHost(_ip, _port);
 }
 
-void SocketControl::disconnect()
+void SocketControl::disconnectFromDevice()
 {
-    _socket->close();
+    if (m_socket.isOpen()) {
+        m_socket.disconnectFromHost();
+        if (m_socket.state() != QAbstractSocket::UnconnectedState) {
+            m_socket.waitForDisconnected(100);
+        }
+    }
 }
 
-QAbstractSocket::SocketState SocketControl::state()
+QAbstractSocket::SocketState SocketControl::state() const
 {
-    return _socket->state();
+    return m_socket.state();
 }
 
-bool SocketControl::isConnected()
+bool SocketControl::isConnected() const
 {
-    return _socket->state() == QAbstractSocket::ConnectedState;
+    return m_socket.state() == QAbstractSocket::ConnectedState;
 }
 
-quint64 SocketControl::send(QByteArray data)
+quint64 SocketControl::send(const QByteArray &data)
 {
-    if(!_socket->isOpen()) {
+    if(!m_socket.isOpen()) {
         return -1;
     }
-    return _socket->write(data);
+    return m_socket.write(data);
 }
 
 quint64 SocketControl::SendCommand(quint8 cmd, quint32 data)
 {
-    qDebug()<< "SocketControl::SendCommand with " << data;
-    _struct.header = 'A';
-    _struct.footer = 'B';
-    _struct.command = cmd;
-    _struct.data    = data;
-
-    QByteArray ba;
-    ba.reserve(8);
-    ba.append(char(_struct.header));
-    ba.append(char(_struct.command));
-    ba.append(reinterpret_cast<const char*>(&_struct.data), 4); // native-endian
-
-    // CRC trên [cmd(1) + data(4)]
-    const quint8 *p = reinterpret_cast<const quint8*>(ba.constData()) + 1;
-    _struct.crc = Crc_Calulater(const_cast<quint8*>(p), 5);
-
-    ba.append(char(_struct.crc));
-    ba.append(char(_struct.footer));
-    return _socket->write(ba);
-}
-
-quint8 SocketControl::Crc_Calulater(quint8 *data, int len)
-{
-    quint8 crc = 0;
-    quint8 extract, sum;
-    quint8 polynomial = 0x8C;
-    qDebug() << "len in = SocketControl" << len << Qt::endl;
-    for(int i = 0; i < len; i++) {
-        extract = *data;
-        for(int j = 8; j > 0; j--) {
-            sum = (quint8)((crc ^ extract) & 0x01);
-            crc >>= 1;
-            if(sum != 0)
-                crc ^= polynomial;
-            extract >>= 1;
-        }
-        data++;
-    }
-    return crc;
+    qDebug() << "SocketControl::SendCommand" << cmd << data;
+    return send(protocol::buildFrame(cmd, data));
 }
 
 void SocketControl::socket_stateChanged(QAbstractSocket::SocketState state)
 {
     if (state == QAbstractSocket::UnconnectedState) {
-        _socket->close();
+        m_socket.close();
     }
     emit stateChanged(state);
 }
 
 void SocketControl::socket_readyRead()
 {
-    auto data = _socket->readAll();
-    emit dataReady(data);
-    qDebug()<<"socket_readyRead: " << data;
+    const QByteArray data = m_socket.readAll();
+    if (!data.isEmpty()) {
+        emit dataReady(data);
+    }
+    qDebug() << "socket_readyRead:" << data;
 }

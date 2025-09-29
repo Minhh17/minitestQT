@@ -11,6 +11,7 @@
 #include <QString>
 #include <DeviceControl.h>
 #include <socketcontrol.h>
+#include "protocolutils.h"
 
 // PC side - UI Class
 
@@ -121,7 +122,6 @@ private slots:
 private:
     Ui::FpgaControlDialog *ui;
     DeviceControl *fpga_device;
-    CommandStruct _struct;
     SocketControl *socket_device;
 
     QByteArray m_rx;

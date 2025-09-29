@@ -42,12 +42,13 @@ private slots:
 
 private:
     Ui::FPGADialog *ui;
-    SerialPort *_port;
+    SerialPort m_serialPort;
     // QString _portName;
-    CommandStruct _struct;
+
     QTcpServer m_server;
     QList<QTcpSocket*> m_clients;
     QHash<QTcpSocket*, QByteArray> m_socketBuffers;
+    QByteArray m_serialBuffer;
 
 };
 

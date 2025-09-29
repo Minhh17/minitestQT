@@ -11,7 +11,7 @@
 #include <DeviceControl.h>
 #include "socketcontrol.h"
 #include <QMetaEnum>
-
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -45,11 +45,13 @@ signals:
 
 private:
     Ui::MainWindow *ui;
-    DeviceControl *_device;
-    SerialPort *_port;
+    // DeviceControl *_device;
+    std::unique_ptr<DeviceControl> _device;
+    // SerialPort *_port;
     FpgaControlDialog fpga_dlg;
     // FPGADialog test_dlg;
-    SocketControl *_socketcontroller;
+    // SocketControl *_socketcontroller;
+    std::unique_ptr<SocketControl> _socketcontroller;
 
 };
 #endif // MAINWINDOW_H

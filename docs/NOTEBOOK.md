@@ -1,63 +1,25 @@
-# Engineering Notebook
+hật ký phát triển dự án mô phỏng giao tiếp PC–FPGA.
 
-This engineering notebook documents the development of the mini test FPGA-PC communication example.
+## Phân tích yêu cầu
+- Đề bài mini test: cần ứng dụng Qt gửi lệnh xuống FPGA, nhận 2 giá trị 16-bit phản hồi để hiển thị vẽ hình.
+- Đọc hiểu đánh giá repo sample: code đã hoạt động cơ bản nhưng còn nhiều phần trùng lặp (CRC, đóng gói dữ liệu) và quản lý bộ nhớ thủ công.
+- Ghi chú các vấn đề ưu tiên: chuẩn hóa giao thức, dọn dẹp con trỏ raw, bổ sung tài liệu kỹ thuật.
 
-## Entry 1 – 2025‑09‑27: Phân tích yêu cầu 
+## Tái cấu trúc tầng giao tiếp
+- Tạo mô-đun `protocolutils` gom logic tính CRC-8 và dựng/giải mã frame 8 byte cho cả Serial lẫn TCP.
+- Refactor `SerialPort`, `DeviceControl`, `SocketControl` sang sử dụng RAII (đối tượng thành viên + `std::unique_ptr`) để tránh rò rỉ và bảo toàn tín hiệu Qt.【F:serialport.cpp†L5-L64】【F:DeviceControl.cpp†L6-L82】
+- Chuẩn hóa kết nối tín hiệu trong `MainWindow`, hiển thị rõ trạng thái khi kết nối thất bại.【F:mainwindow.cpp†L6-L93】
 
-- I reviewed the mini‑test specification. The Qt program will send commands from PC to an FPGA and receive a 2params×16‑bit response for plotting. 
-- Because I dont have a FPGA, I will implement a simulated FPGA with two port to test communication. 
-- I decided to use TCP/IP over Ethernet first instead of RS‑422 because it can run entirely on a single computer and easier.  I looked up the Qt network classes and noted that QTcpServer can listen for connections and emit a newConnection signal.  For the client I will use QTcpSocket.
+## Chuẩn hóa phía thiết bị mô phỏng & UI
+- Áp dụng `protocolutils` cho `FPGADialog` và `FpgaControlDialog` để xử lý buffer và phản hồi thống nhất.【F:FPGADialog.cpp†L1-L189】【F:fpgacontroldialog.cpp†L1-L207】
+- Loại bỏ việc xoá thủ công đối tượng được truyền qua tín hiệu, tránh crash khi UI còn sử dụng.【F:fpgacontroldialog.cpp†L84-L111】
+- Cải tiến log hiển thị, bảo đảm UI cập nhật trạng thái “Connected/Disconnected” chính xác.
 
+## Hoàn thiện tài liệu & kế hoạch kiểm thử
+- Viết README bằng tiếng Việt, hướng dẫn build/run rõ ràng.【F:README.md†L1-L34】
+- Biên soạn tài liệu thiết kế với sơ đồ lớp, sequence diagram và lập luận lựa chọn kiến trúc.【F:docs/DESIGN.md†L1-L94】
+- Lập nhật ký kiểm thử và checklist test tay để chứng minh chức năng cốt lõi.【F:docs/TESTING.md†L1-L64】
 
-
-## Entry 2 – 2025‑09‑21: Design draft
-
-Drafted a high‑level architecture.  There will be two separate
-applications: a console **server** and a GUI **client**.  The
-server will accept connections, generate random data on demand,
-pack it into a 4‑byte message and send it back.  The client will
-connect, send a command, read the 4 bytes and extract two
-16‑bit values.  I considered using `QSerialPort` but postponed
-serial support to a future iteration.
-
-## Entry 3 – 2025‑09‑22: Implementing the server
-
-Implemented the server in C++ with Qt.  I created a `Fpgaserver`
-class that wraps a `QTcpServer`.  In the `onNewConnection` slot
-it calls `nextPendingConnection()` to obtain the socket.  I
-connected `readyRead()` to a lambda that reads incoming data,
-generates two random numbers using `QRandomGenerator`, serializes
-them with `QDataStream` (big‑endian) and writes them to the
-socket.  Verified that the server listens and responds correctly
-using `nc` in the terminal.
-
-## Entry 4 – 2025‑09‑23: Building the GUI client
-
-Started the GUI client.  I created a `MainWindow` with host and
-port fields, Connect and Send buttons, and a status label.  I
-factored the socket code into a separate `NetworkClient` class
-that wraps `QTcpSocket`.  The client sends a one‑byte command
-0x01 when the user clicks Send.  On `readyRead` it reads data
-into a buffer until at least four bytes are present, then uses
-`QDataStream` to extract two `quint16` values.  I added a
-`PlotWidget` class to store points and draw them using
-`QPainter`.
-
-## Entry 5 – 2025‑09‑24: Testing and refinements
-
-Tested the integrated system.  The client connected to the server
-and plotted the points.  I observed that the points tended to
-cluster around the top left corner because the raw values ranged
-from 0 to 65535 while the widget was smaller.  Added scaling in
-`PlotWidget` to map the raw values to the widget’s width and
-height.  Added error handling in `NetworkClient` to display
-messages when the connection fails.
-
-## Entry 6 – 2025‑09‑25: Documentation
-
-Compiled the design notes into `docs/DESIGN.md` and wrote this
-notebook.  Made sure to number and date each entry and to
-document decisions such as choosing TCP and generating random
-data.  Cited the Qt documentation and engineering notebook
-guidelines where appropriate【280627883494165†L64-L94】【787370860010465†L231-L244】.
-Prepared `TESTING.md` with the test plan.
+## Next task
+- Có thể mở rộng `protocolutils` để hỗ trợ nhiều phiên bản giao thức (ví dụ big-endian) nếu yêu cầu thay đổi.
+- Xem xét bổ sung unit test cho CRC bằng Qt Test hoặc GoogleTest khi có thời gian.

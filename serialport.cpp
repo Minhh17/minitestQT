@@ -1,65 +1,72 @@
 #include "serialport.h"
+#include <QDebug>
 
 SerialPort::SerialPort(QObject *parent)
     : QObject{parent}
-    , _serialport(nullptr)
+    , m_serialport(this)
 {
-
+    connect(&m_serialport, &QSerialPort::readyRead, this, &SerialPort::dataReady);
+    connect(&m_serialport, &QSerialPort::errorOccurred, this, [this](QSerialPort::SerialPortError error) {
+        if (error == QSerialPort::ResourceError) {
+            emit disconnected();
+            Close();
+        }
+    });
 }
 
-bool SerialPort::Connect(QString portname)
+bool SerialPort::Connect(const QString &portname)
 {
-    if(_serialport != nullptr) {
-        _serialport->close();
-        delete _serialport;
+    if (m_serialport.isOpen()) {
+        m_serialport.close();
     }
-    _serialport = new QSerialPort(this);
-    _serialport->setBaudRate(QSerialPort::Baud115200);
-    _serialport->setDataBits(QSerialPort::Data8);
-    _serialport->setParity(QSerialPort::NoParity);
-    _serialport->setStopBits(QSerialPort::OneStop);
-    _serialport->setPortName(portname);
 
-    if(_serialport->open(QIODevice::ReadWrite)) {
-        connect(_serialport, &QSerialPort::readyRead, this, &SerialPort::dataReady);
+    m_serialport.setBaudRate(QSerialPort::Baud115200);
+    m_serialport.setDataBits(QSerialPort::Data8);
+    m_serialport.setParity(QSerialPort::NoParity);
+    m_serialport.setStopBits(QSerialPort::OneStop);
+    m_serialport.setPortName(portname);
+
+    if (!m_serialport.open(QIODevice::ReadWrite)) {
+        qWarning() << "Không thể mở cổng" << portname << ":" << m_serialport.errorString();
+        return false;
     }
-    return _serialport->isOpen();
+    return true;
 }
 
 bool SerialPort::Close()
 {
-    // if(_serialport != nullptr) {
-    //     _serialport->close();
-    //     delete _serialport;
-    // }
+    if (!m_serialport.isOpen()) {
+        return true;
+    }
+
+    m_serialport.close();
+    return !m_serialport.isOpen();
 }
 
-qint64 SerialPort::Write(QByteArray data)
+qint64 SerialPort::Write(const QByteArray &data)
 {
-    if(!_serialport->isOpen()) {
+    if(!m_serialport.isOpen()) {
         return -1;
     }
-    return _serialport->write(data);
+    return m_serialport.write(data);
 }
 
-bool SerialPort::isOpen()
+bool SerialPort::isOpen() const
 {
-    return _serialport->isOpen();
+    return m_serialport.isOpen();
 }
 
 SerialPort::~SerialPort()
 {
-    // if(_serialport != nullptr) {
-    //     qDebug()<< "~SerialPort()";
-    //     _serialport->close();
-    //     delete _serialport;
-    // }
+    Close();
 }
 
 void SerialPort::dataReady()
 {
-    if(_serialport->isOpen()) {
-        auto data = _serialport->readAll();
-        emit dataRecevie(data);
+    if (m_serialport.isOpen()) {
+        const QByteArray data = m_serialport.readAll();
+        if (!data.isEmpty()) {
+            emit dataRecevie(data);
+        }
     }
 }
