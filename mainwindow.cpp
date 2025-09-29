@@ -1,17 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-// , _port(nullptr)
+    , _port(nullptr)
 {
     ui->setupUi(this);
     LoadPort();
     //connect(&_port, &SerialPort::dataRecevie, this, &MainWindow::readData);
     connect(this, &MainWindow::connected, &fpga_dlg, &FpgaControlDialog::SerialPortConnected);
-    connect(this, &MainWindow::socketconnected, &fpga_dlg, &FpgaControlDialog::SocketConneced);
+    connect(this, &MainWindow::socketconnected, &fpga_dlg, &FpgaControlDialog::SocketConnected);
 }
 
 MainWindow::~MainWindow()
@@ -25,7 +24,7 @@ void MainWindow::LoadPort()
     foreach (auto &port_, QSerialPortInfo::availablePorts()) {
         ui->cmb_Name->addItem(port_.portName());
     }
-    //ui->cmb_Name->addItem("ttyV0");
+    ui->cmb_Name->addItem("ttyV0");
 }
 
 void MainWindow::setDeviceContoller()
@@ -44,19 +43,19 @@ void MainWindow::setDeviceContoller()
 
 void MainWindow::on_btn_Open_clicked()
 {
-    // _decevie = new DeviceControl(ui->cmb_Name->currentText());
-    _decevie = new DeviceControl("ttyV0");
-    auto isConnect = _decevie->Connect();
-    qDebug() << _decevie->isOpen();
+    _device = new DeviceControl(ui->cmb_Name->currentText());
+    // _device = new DeviceControl("ttyV0");
+    auto isConnect = _device->Connect();
+    qDebug() << _device->isOpen();
     if(!isConnect) {
         QMessageBox::critical(this, "Error", "Connection Failed!!");
     }
     else {
         QMessageBox::information(this, "Reuslt", "Serial Port Opened");
-        emit connected(_decevie);
+        emit connected(_device);
         fpga_dlg.show();
-        //        test_dlg.show();
-        MainWindow::close();
+        // test_dlg.show();
+        // MainWindow::close();
     }
 }
 

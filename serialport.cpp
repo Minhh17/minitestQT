@@ -22,7 +22,6 @@ bool SerialPort::Connect(QString portname)
 
     if(_serialport->open(QIODevice::ReadWrite)) {
         connect(_serialport, &QSerialPort::readyRead, this, &SerialPort::dataReady);
-//        connect(_serialport, &QSerialPort::disconnect, this, &SerialPort::Disconnect);
     }
     return _serialport->isOpen();
 }
@@ -62,13 +61,5 @@ void SerialPort::dataReady()
     if(_serialport->isOpen()) {
         auto data = _serialport->readAll();
         emit dataRecevie(data);
-    }
-}
-
-void SerialPort::Disconnect()
-{
-    if(_serialport->isOpen()) {
-        _serialport->close();
-        emit disconnected();
     }
 }

@@ -6,7 +6,7 @@
 #include <QSerialPortInfo>
 #include <QString>
 #include "serialport.h"
-#include "fpgacontroldialog.h"
+#include <fpgacontroldialog.h>
 #include <FPGADialog.h>
 #include <DeviceControl.h>
 #include "socketcontrol.h"
@@ -45,7 +45,7 @@ signals:
 
 private:
     Ui::MainWindow *ui;
-    DeviceControl *_decevie;
+    DeviceControl *_device;
     SerialPort *_port;
     FpgaControlDialog fpga_dlg;
     FPGADialog test_dlg;

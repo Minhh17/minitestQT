@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>784</width>
-    <height>612</height>
+    <height>619</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -398,6 +398,7 @@
    <property name="font">
     <font>
      <pointsize>20</pointsize>
+     <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
@@ -909,13 +910,13 @@
     </rect>
    </property>
   </widget>
-  <widget class="QGraphicsView" name="graphicsView">
+  <widget class="QWidget" name="plotContainer" native="true">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>20</y>
-     <width>371</width>
-     <height>251</height>
+     <x>410</x>
+     <y>30</y>
+     <width>331</width>
+     <height>231</height>
     </rect>
    </property>
   </widget>

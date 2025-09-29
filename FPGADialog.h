@@ -2,8 +2,12 @@
 #define FPGADIALOG_H
 
 #include <QDialog>
-#include "serialport.h"
 #include <QMessageBox>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QRandomGenerator>
+
+#include "serialport.h"
 #include "commandstruct.h"
 
 namespace Ui {
@@ -27,7 +31,9 @@ private slots:
 
 private:
     Ui::FPGADialog *ui;
-    SerialPort _port;
+    SerialPort *_port;
+    // QString _portName;
+    CommandStruct _struct;
 };
 
 #endif // FPGADIALOG_H

@@ -5,7 +5,7 @@
 #include <serialport.h>
 #include <commandstruct.h>
 
-// PC Obj
+// PC Side
 
 class DeviceControl : public QObject
 {
@@ -14,29 +14,19 @@ public:
     explicit DeviceControl(QObject *parent = nullptr);
 
     DeviceControl(QString);
-
     bool Connect();
-
     qint64 SendCommand(quint8, quint32);
-
     QString GetPortName();
-
     void SetPortName(QString);
-
     bool isOpen();
-
     quint8 Crc_Calulater(quint8 *data, int len);
-
     ~DeviceControl();
 
 signals:
-
     void dataReady(QByteArray);
-
     // void disconnected();
 
 private slots:
-
     void readData(QByteArray);
     void disconnected();
 

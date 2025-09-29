@@ -26,7 +26,6 @@ private:
 
 private slots:
     void dataReady();
-    void Disconnect();
 
 signals:
     void dataRecevie(QByteArray data);

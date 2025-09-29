@@ -46,18 +46,23 @@ bool DeviceControl::Connect()
 
 qint64 DeviceControl::SendCommand(quint8 cmd, quint32 data)
 {
-    QByteArray ba;
-    quint8* buff;
+    _struct.header  = 'A';
+    _struct.footer  = 'B';
     _struct.command = cmd;
-    _struct.data = data;
-    ba.append(reinterpret_cast<const char*>(&_struct.header), sizeof(char));
-    ba.append(reinterpret_cast<const char*>(&_struct.command), sizeof(char));
-    ba.append(reinterpret_cast<const char*>(&_struct.data), sizeof(int));
-    buff = reinterpret_cast<quint8*>(ba.data());
-    _struct.crc = Crc_Calulater(buff, ba.size() - 2);
-    ba.append(reinterpret_cast<const char*>(&_struct.crc), sizeof(char));
-    ba.append(reinterpret_cast<const char*>(&_struct.footer), sizeof(char));
-    //    QByteArray ba(reinterpret_cast<char*>(&_struct), sizeof(CommandStruct));
+    _struct.data    = data;
+
+    QByteArray ba;
+    ba.reserve(8);
+    ba.append(char(_struct.header));
+    ba.append(char(_struct.command));
+    ba.append(reinterpret_cast<const char*>(&_struct.data), 4); // native-endian
+
+    // CRC trên [cmd(1) + data(4)]
+    const quint8 *p = reinterpret_cast<const quint8*>(ba.constData()) + 1;
+    _struct.crc = Crc_Calulater(const_cast<quint8*>(p), 5);
+
+    ba.append(char(_struct.crc));
+    ba.append(char(_struct.footer));
     return _port->Write(ba);
 }
 
@@ -81,7 +86,7 @@ quint8 DeviceControl::Crc_Calulater(quint8 *data, int len)
     quint8 crc = 0;
     quint8 extract, sum;
     quint8 polynomial = 0x8C;
-    qDebug() << "len = " << len << Qt::endl;
+    qDebug() << "len in Crc_Calulater= " << len << Qt::endl;
     for(int i = 0; i < len; i++) {
         extract = *data;
         for(int j = 8; j > 0; j--) {

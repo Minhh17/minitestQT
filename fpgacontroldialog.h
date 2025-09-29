@@ -2,11 +2,17 @@
 #define FPGACONTROLDIALOG_H
 
 #include <QDialog>
+#include <QtCharts/QChartView>
+#include <QtCharts/QScatterSeries>
+#include <QtCharts/QValueAxis>
+#include <QVBoxLayout>
 #include <serialport.h>
 #include <commandstruct.h>
 #include <QString>
 #include <DeviceControl.h>
 #include <socketcontrol.h>
+
+// PC side - UI Class
 
 namespace Ui {
 class FpgaControlDialog;
@@ -55,7 +61,7 @@ public:
 public slots:
     void SerialPortConnected(DeviceControl*);
 
-    void SocketConneced(SocketControl*);
+    void SocketConnected(SocketControl*);
 
     void ReadData(QByteArray);
 
@@ -110,11 +116,20 @@ private slots:
 
     void on_btn_ratio_noise_clicked();
 
+    void onSocketReadyRead();
+
 private:
     Ui::FpgaControlDialog *ui;
-    DeviceControl *fpga_decevie;
+    DeviceControl *fpga_device;
     CommandStruct _struct;
-    SocketControl *socket_decevie;
+    SocketControl *socket_device;
+
+    QByteArray m_rx;
+    QChartView *m_chartView = nullptr;
+    QChart     *m_chart     = nullptr;
+    QScatterSeries *m_series = nullptr;
+    QValueAxis *m_axX = nullptr, *m_axY = nullptr;
+    void plotPoint(quint16 x, quint16 y);
 };
 
 #endif // FPGACONTROLDIALOG_H
