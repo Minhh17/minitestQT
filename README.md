@@ -22,8 +22,13 @@ Toàn bộ giao tiếp dùng khung dữ liệu 8 byte `[Header 'A'][Command][Dat
 2. Chạy trong QtCreator cũng đồng thời mở **FPGADialog** để giả lập thiết bị, FPGA giả lập này sẽ tự động lắng nghe cổng Ethernet - TCP/IP hoặc ấn nút Connect để kết nối cổng Serial 
 3. Sử dụng các textEdit, nút cấu hình trong `FpgaControlDialog` để phát lệnh. Điểm đo phản hồi sẽ được vẽ trên biểu đồ (2 điểm ngẫu nhiêu).
 
+### Demo
+https://github.com/user-attachments/assets/daf65bd1-a441-4824-862f-94709c2cc658
+
 ## Tài liệu kèm theo
 
 - `docs/DESIGN.md`: kiến trúc, class diagram và sequence diagram.
+- `docs/REVIEW
 - `docs/NOTEBOOK.md`: nhật ký.
 - `docs/TESTING.md`: kiểm thử và kết quả.
+
