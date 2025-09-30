@@ -1,4 +1,4 @@
-<img width="1210" height="658" alt="minitestSequence_" src="https://github.com/user-attachments/assets/28c1f41b-540a-40ca-bcff-f1e7f891a0a3" /># Thiết kế hệ thống
+# Thiết kế hệ thống
 
 ## 1. Tổng quan kiến trúc
 
@@ -19,16 +19,13 @@ Giao thức truyền thông thống nhất 8 byte với CRC-8 đa thức `0x8C`.
 - **protocolutils**: hàm tính CRC-8, đóng gói khung lệnh, rút gói từ buffer. Tập trung hóa giúp hai phía Client/FPGA dùng chung quy tắc.
 
 ## 3. Sơ đồ lớp
-<img width="1266" height="694" alt="minitest_Class" src="https://github.com/user-attachments/assets/3c6e66fb-cfaa-43ab-b718-685f514c9eb9" />
 <img width="2176" height="1134" alt="minitestClassDetail" src="https://github.com/user-attachments/assets/ca421b9f-8dcd-47ee-9cd4-e1ce44e39ba2" />
 
 ## 4. Chuỗi trao đổi dữ liệu
-<img width="1210" height="658" alt="minitestSequence_" src="https://github.com/user-attachments/assets/ab10ebe2-d836-4b38-83bb-7c4d0a5b5ada" />
 <img width="1412" height="1660" alt="minitestSequenDetail" src="https://github.com/user-attachments/assets/200f54a5-5fb5-4949-8e39-72c3fe71ab8b" />
 
 ## 5. Lý do thiết kế
 
-- **Tái sử dụng giao thức**: đặt các hàm CRC/đóng gói vào `protocolutils` để loại bỏ ba bản sao giống nhau, giảm trùng lặp dài dòng giúp sửa lỗi và mở rộng dễ dàng. 
-- **Quản lý tài nguyên an toàn**: dùng `std::unique_ptr` ở `MainWindow` để nắm quyền sở hữu `DeviceControl`/`SocketControl`, tránh rò rỉ khi người dùng bấm Open/Connect nhiều lần.
+- **Tái sử dụng giao thức**: đặt các hàm CRC/đóng gói vào `protocolutils` để loại bỏ ba bản sao giống nhau, giảm trùng lặp dài dòng. 
+- **Quản lý tài nguyên an toàn**: dùng `std::unique_ptr` ở `MainWindow` để nắm quyền sở hữu `DeviceControl`/`SocketControl`, tránh rò rỉ khi bấm Open/Connect nhiều lần.
 - **Buffer phân tầng**: `FPGADialog` và `FpgaControlDialog` duy trì buffer riêng cho Serial và TCP để xử lý gói không trọn vẹn mà không mất dữ liệu.
-- **Kết nối tín hiệu rõ ràng**: các lớp giao tiếp phát tín hiệu Qt để UI phản ứng, giúp phân tách xử lý nền và giao diện.
