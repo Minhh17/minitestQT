@@ -3,6 +3,7 @@
 #include "serialport.h"
 #include "protocolutils.h"
 #include <QDebug>
+#include <string>
 
 // FPGA Simu Device
 
@@ -70,16 +71,18 @@ void FPGADialog::readyRead(QByteArray data)
     while (protocol::tryExtractFrame(m_serialBuffer, frame))
     {
         const quint8 cmd = frame.command;
+        const quint32 data = frame.data;
         if(cmd == 0) {
-            ui->lst_Message->addItem("Idx_PriMode");
+            ui->lst_Message->addItem(QString("Idx_PriMode: %1").arg(data));
             ui->lbl_State->setNum(int(cmd));
         }
         else if (cmd == 1) {
-            ui->lst_Message->addItem("Idx_WfCtrl_MT");
+            ui->lst_Message->addItem(QString("Idx_WfCtrl_MT: %1").arg(data));
             ui->lbl_decevie_state->setNum(double(frame.data));
         }
         else if (cmd == 2) {
-            ui->lst_Message->addItem("Idx_Rf_Tx_R3");
+            // ui->lst_Message->addItem("Idx_Rf_Tx_R3");
+            ui->lst_Message->addItem(QString("Idx_Rf_Tx_R3: %1").arg(data));
             ui->lbl_Speed->setNum(double(frame.data));
         }
         else if (cmd == 3) {
@@ -117,17 +120,20 @@ void FPGADialog::onSocketReadyRead()
     while (protocol::tryExtractFrame(buffer, frame))
     {
         const quint8 cmd = frame.command;
+        const quint32 data = frame.data;
 
         if(cmd == 0) {
-            ui->lst_Message->addItem("Idx_PriMode");
+            ui->lst_Message->addItem(QString("Idx_PriMode: %1").arg(data));
             ui->lbl_State->setNum(int(cmd));
         }
         else if (cmd == 1) {
-            ui->lst_Message->addItem("Idx_WfCtrl_MT");
+            // ui->lst_Message->addItem("Idx_WfCtrl_MT");
+            ui->lst_Message->addItem(QString("Idx_WfCtrl_MT: %1").arg(data));
             ui->lbl_decevie_state->setNum(double(frame.data));
         }
         else if (cmd == 2) {
-            ui->lst_Message->addItem("Idx_Rf_Tx_R3");
+            // ui->lst_Message->addItem("Idx_Rf_Tx_R3");
+            ui->lst_Message->addItem(QString("Idx_Rf_Tx_R3: %1").arg(data));
             ui->lbl_Speed->setNum(double(frame.data));
         }
         else if (cmd == 3) {

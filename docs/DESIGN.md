@@ -20,6 +20,7 @@ Giao thức truyền thông thống nhất 8 byte với CRC-8 đa thức `0x8C`.
 
 ## 3. Sơ đồ lớp
 
+
 ## 4. Chuỗi trao đổi dữ liệu
 
 ## 5. Lý do thiết kế
