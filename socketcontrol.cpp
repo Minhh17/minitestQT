@@ -16,7 +16,7 @@ SocketControl::SocketControl(QObject *parent)
 SocketControl::SocketControl(const QString &ip, int port, QObject *parent)
     : SocketControl(parent)
 {
-    connectToDevice(_ip, _port);
+    connectToDevice(ip, port);
 }
 
 SocketControl::~SocketControl()

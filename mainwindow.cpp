@@ -3,6 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     LoadPort();
@@ -30,7 +31,9 @@ void MainWindow::LoadPort()
 void MainWindow::setDeviceContoller()
 {
     if(_socketcontroller) {
-        auto *controller = _socketcontroller.get();
+        qDebug() << "setDeviceContoller";
+        // auto *controller = _socketcontroller.get();
+        auto *controller = _socketcontroller;
         connect(controller, &SocketControl::connected, this, &MainWindow::device_connected);
         connect(controller, &SocketControl::disconnected, this, &MainWindow::device_disconnected);
         connect(controller, &SocketControl::stateChanged, this, &MainWindow::device_stateChanged);
@@ -45,17 +48,18 @@ void MainWindow::setDeviceContoller()
 void MainWindow::on_btn_Open_clicked()
 {
     const QString portName = ui->cmb_Name->currentText();
-    _device = std::make_unique<DeviceControl>(portName);
+    // _device = std::make_unique<DeviceControl>(portName);
+    _device = new DeviceControl(ui->cmb_Name->currentText());
 
     const bool isConnect = _device->Connect();
 
     if(!isConnect) {
-        _device.reset();
+        // _device.reset();
         QMessageBox::critical(this, "Error", "Connection Failed!!");
     }
     else {
         QMessageBox::information(this, "Reuslt", "Serial Port Opened");
-        emit connected(_device.get());
+        emit connected(_device/*.get()*/);
         fpga_dlg.show();
         // test_dlg.show();
         // MainWindow::close();
@@ -64,8 +68,9 @@ void MainWindow::on_btn_Open_clicked()
 
 void MainWindow::on_btn_connect_clicked()
 {
-    // _socketcontroller = new SocketControl(ui->ln_Ip_Addr->text(), ui->spn_port->value());
-    _socketcontroller = std::make_unique<SocketControl>(ui->ln_Ip_Addr->text(), ui->spn_port->value());
+    qDebug()<< "ln_Ip_Addr, spn_port" << ui->ln_Ip_Addr->text() << ui->spn_port->value();
+    _socketcontroller = new SocketControl(ui->ln_Ip_Addr->text(), ui->spn_port->value());
+    // _socketcontroller = std::make_unique<SocketControl>(ui->ln_Ip_Addr->text(), ui->spn_port->value());
     setDeviceContoller();
 }
 
@@ -78,7 +83,7 @@ void MainWindow::device_connected()
     }
     else {
         QMessageBox::information(this, "Reuslt", "Socket connected");
-        emit socketconnected(_socketcontroller.get());
+        emit socketconnected(_socketcontroller/*.get()*/);
         fpga_dlg.show();
         //MainWindow::close();
         close();
@@ -93,13 +98,13 @@ void MainWindow::device_disconnected()
 void MainWindow::device_stateChanged(QAbstractSocket::SocketState state)
 {
     const QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketState>();
-    qDebug() << metaEnum.valueToKey(state);
+    qDebug() << "device_stateChanged: "<< metaEnum.valueToKey(state);
 }
 
 void MainWindow::device_errorOccurred(QAbstractSocket::SocketError error)
 {
-    const QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketState >();
-    qDebug() << metaEnum.valueToKey(error);
+    const QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketError>();
+    qDebug() <<"device_errorOccurred"<< metaEnum.valueToKey(error);
 }
 
 void MainWindow::device_dataReady(QByteArray data)

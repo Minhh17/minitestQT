@@ -45,13 +45,13 @@ signals:
 
 private:
     Ui::MainWindow *ui;
-    // DeviceControl *_device;
-    std::unique_ptr<DeviceControl> _device;
+    DeviceControl *_device;
+    // std::unique_ptr<DeviceControl> _device;
     // SerialPort *_port;
     FpgaControlDialog fpga_dlg;
     // FPGADialog test_dlg;
-    // SocketControl *_socketcontroller;
-    std::unique_ptr<SocketControl> _socketcontroller;
+    SocketControl *_socketcontroller;
+    // std::unique_ptr<SocketControl> _socketcontroller;
 
 };
 #endif // MAINWINDOW_H
